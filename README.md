@@ -1,2 +1,1 @@
-# skynet-test
-demo
+#Skynet Feasibility Test

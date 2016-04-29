@@ -1,0 +1,1 @@
+cmd_/home/spacenet/Documents/spacenet/skynet-test/demo/content.ko := ld -r -m elf_x86_64 -T ./scripts/module-common.lds --build-id  -o /home/spacenet/Documents/spacenet/skynet-test/demo/content.ko /home/spacenet/Documents/spacenet/skynet-test/demo/content.o /home/spacenet/Documents/spacenet/skynet-test/demo/content.mod.o
