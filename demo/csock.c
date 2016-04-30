@@ -30,7 +30,7 @@
 #define CACHE_HEAD_CODE 55
 #define EX_IP_LEN 48
 #define LABEL_LEN 40
-#define CHUNK_SIZE 10
+#define CHUNK_SIZE 6
 
 /*
 int msg_to_skb(struct msghdr* msg, struct sk_buff* skb, size_t offset)
@@ -78,7 +78,9 @@ void csock_fini(struct sock* sk, long timeout)
 {
 	//struct content_sock* csk = csock(sk);
 	//fini hashtable
+    printk("csock-sk_common_release: before close sock");
 	sk_common_release(sk);
+    printk("csock-sk_common_release: close sock");
 }
 
 //git from heshao demo
@@ -132,7 +134,7 @@ unsigned char send_data_packet(const struct in6_addr sip, const struct in6_addr 
         if(NULL==label)
             goto out;
         pexhdr[0] = 59;
-        pexhdr[1] = 1;
+        pexhdr[1] = 5;
         memcpy(&(pexhdr[2]),label,label_len);
     }
 
@@ -170,6 +172,7 @@ unsigned char send_data_packet(const struct in6_addr sip, const struct in6_addr 
     }
 
     //send the skb
+    printk("csock_send_packet");
     if(0 > dst_output(skb))
         goto out;
     nret = 0;
@@ -197,9 +200,12 @@ int csock_sendmsg(struct content_sock* sk, struct msghdr* msg,
             memset(&saddr, 0, sizeof(struct in6_addr));
             unsigned char label[LABEL_SIZE];
             memcpy(label, LABEL((*msg).msg_control), LABEL_SIZE);
-            unsigned char buffer[10];
-            memset(buffer, 0, 10);
-            send_data_packet(saddr, daddr, label, LABEL_SIZE, buffer, 10);
+            //label = LABEL((*msg).msg_control);
+            unsigned char buffer[CHUNK_SIZE];
+            memset(buffer, 0, CHUNK_SIZE);
+            printk("csock: before send_data_packet\n");
+            send_data_packet(saddr, daddr, label, LABEL_SIZE, buffer, CHUNK_SIZE);
+            printk("csock-sendmsg: after send_data_packet\n");
 		}; break;
 	case CONTENT_RESP:
 		{

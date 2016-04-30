@@ -12,6 +12,8 @@
 #include <netinet/in.h>
 
 #include <string.h>
+#include <unistd.h>
+#include <stdio.h>
 
 #include "proto.h"
 
@@ -64,6 +66,7 @@ int main()
 		perror("recvmsg");
 	}
 */
+    sleep(2);
 	close(sock);
 	return 0;
 }
